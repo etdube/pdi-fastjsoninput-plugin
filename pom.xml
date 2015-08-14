@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<pdi.plugin.dir>plugins/steps/${name}</pdi.plugin.dir>
+		<pdi.plugin.dir>plugins/steps/${project.name}</pdi.plugin.dir>
 		<pdi.plugin.lib_name>fastjsoninput.jar</pdi.plugin.lib_name>
 		<pdi.plugin.includelibs>json-path-1.2.0.jar,json-smart-2.1.0.jar,asm-1.0.2.jar</pdi.plugin.includelibs>
 		<pdi.home>/home/soliumuser/workspace/pentaho-kettle/dist</pdi.home>
@@ -100,6 +100,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.10</version>
 				<configuration>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>true</downloadJavadocs>
@@ -107,6 +108,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
@@ -169,7 +171,7 @@
 								<echo>Copying the plugin lib to pdi plugin directory
 									(${pdi.plugin.dir})</echo>
 								<copy toFile="${pdi.plugin.dir}/${pdi.plugin.lib_name}"
-									file="${project.build.directory}/${artifactId}-${version}-plugin-lib.jar"
+									file="${project.build.directory}/${project.artifactId}-${project.version}-plugin-lib.jar"
 									overwrite="true" />
 								<echo>Copying the additional libs to pdi plugin directory
 									(${pdi.plugin.dir})</echo>
