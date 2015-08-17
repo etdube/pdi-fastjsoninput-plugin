@@ -18,8 +18,8 @@
 		<pdi.plugin.includelibs>json-path-1.2.0.jar,json-smart-2.1.0.jar,asm-1.0.2.jar</pdi.plugin.includelibs>
 		<pdi.home>/home/soliumuser/workspace/pentaho-kettle/dist</pdi.home>
 
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
 	</properties>
 
 	<repositories>

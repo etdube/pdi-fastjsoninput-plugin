@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedHashMap;
 
 import org.apache.commons.vfs.FileObject;
+import org.json.simple.JSONObject;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.ResultFile;
 import org.pentaho.di.core.exception.KettleException;
@@ -482,18 +484,18 @@ public class FastJsonInput extends BaseStep implements StepInterface {
 			// Get field
 			FastJsonInputField field = meta.getInputFields()[i];
 
-			// get json array for field
-			// JSONArray jsona = data.resultList.get( i ).getJSONArray();
 			// get list of objects for field
 			List<Object> ls = data.resultList.get(i).getObjectList();
 			String nodevalue = null;
-			// if ( jsona != null ) {
-			// Object jo = jsona.get( data.recordnr );
 			if (ls != null) {
-				nodevalue = ls.get(data.recordnr).toString();
-				// if ( jo != null ) {
-				// nodevalue = jo.toString();
-				// }
+				Object jo = ls.get( data.recordnr );
+				if (jo != null) {
+					if (jo instanceof LinkedHashMap) {
+						nodevalue = JSONObject.toJSONString((LinkedHashMap) jo);
+					} else {
+						nodevalue = ls.get(data.recordnr).toString();
+					}
+				}
 			}
 
 			// Do trimming
