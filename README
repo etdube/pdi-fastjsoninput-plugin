@@ -3,9 +3,11 @@ This is an alternate version of the "JSON Input" step that uses Jayway JsonPath
 is intended to be a drop-in replacement for the "JSON Input" step but should
 be much faster and memory efficient.
 
-Author: Etienne Dube - etdube (at) gmail (dot) com
-Based on the existing "JSON Input" step from Pentaho Data Integration.
+Authors: 
+- Etienne Dube - etdube (at) gmail (dot) com
+- Jesse Adametz - jesse (at) graphiq (dot) com
 
+Based on the existing "JSON Input" step from Pentaho Data Integration.
 
 To build (requires Apache Maven 3 or later) and install:
 
