@@ -144,6 +144,11 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 	private Button wIgnoreMissingPath;
 	private FormData fdlIgnoreMissingPath, fdIgnoreMissingPath;
 
+	// default path leaf to null
+	private Label wlDefaultPathLeafToNull;
+	private Button wDefaultPathLeafToNull;
+	private FormData fdlDefaultPathLeafToNull, fdDefaultPathLeafToNull;
+
 	// do not fail if no files?
 	private Label wldoNotFailIfNoFile;
 	private Button wdoNotFailIfNoFile;
@@ -691,13 +696,33 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 		fdIgnoreMissingPath.top = new FormAttachment(wdoNotFailIfNoFile, margin);
 		wIgnoreMissingPath.setLayoutData(fdIgnoreMissingPath);
 
+		// default path leaf to null
+		wlDefaultPathLeafToNull = new Label(wConf, SWT.RIGHT);
+		wlDefaultPathLeafToNull.setText(BaseMessages.getString(PKG,
+				"FastJsonInputDialog.DefaultPathLeafToNull.Label"));
+		props.setLook(wlDefaultPathLeafToNull);
+		fdlDefaultPathLeafToNull = new FormData();
+		fdlDefaultPathLeafToNull.left = new FormAttachment(0, 0);
+		fdlDefaultPathLeafToNull.top = new FormAttachment(wIgnoreMissingPath,
+				margin);
+		fdlDefaultPathLeafToNull.right = new FormAttachment(middle, -margin);
+		wlDefaultPathLeafToNull.setLayoutData(fdlDefaultPathLeafToNull);
+		wDefaultPathLeafToNull = new Button(wConf, SWT.CHECK);
+		props.setLook(wDefaultPathLeafToNull);
+		wDefaultPathLeafToNull.setToolTipText(BaseMessages.getString(PKG,
+				"FastJsonInputDialog.DefaultPathLeafToNull.Tooltip"));
+		fdDefaultPathLeafToNull = new FormData();
+		fdDefaultPathLeafToNull.left = new FormAttachment(middle, 0);
+		fdDefaultPathLeafToNull.top = new FormAttachment(wIgnoreMissingPath, margin);
+		wDefaultPathLeafToNull.setLayoutData(fdDefaultPathLeafToNull);
+
 		wlLimit = new Label(wConf, SWT.RIGHT);
 		wlLimit.setText(BaseMessages.getString(PKG,
 				"FastJsonInputDialog.Limit.Label"));
 		props.setLook(wlLimit);
 		fdlLimit = new FormData();
 		fdlLimit.left = new FormAttachment(0, 0);
-		fdlLimit.top = new FormAttachment(wIgnoreMissingPath, margin);
+		fdlLimit.top = new FormAttachment(wDefaultPathLeafToNull, margin);
 		fdlLimit.right = new FormAttachment(middle, -margin);
 		wlLimit.setLayoutData(fdlLimit);
 		wLimit = new Text(wConf, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
@@ -705,7 +730,7 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 		wLimit.addModifyListener(lsMod);
 		fdLimit = new FormData();
 		fdLimit.left = new FormAttachment(middle, 0);
-		fdLimit.top = new FormAttachment(wIgnoreMissingPath, margin);
+		fdLimit.top = new FormAttachment(wDefaultPathLeafToNull, margin);
 		fdLimit.right = new FormAttachment(100, 0);
 		wLimit.setLayoutData(fdLimit);
 
@@ -1311,6 +1336,7 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 		wIgnoreEmptyFile.setSelection(in.isIgnoreEmptyFile());
 		wdoNotFailIfNoFile.setSelection(in.isdoNotFailIfNoFile());
 		wIgnoreMissingPath.setSelection(in.isIgnoreMissingPath());
+		wDefaultPathLeafToNull.setSelection(in.isDefaultPathLeafToNull());
 		wSourceStreamField.setSelection(in.isInFields());
 		wSourceIsAFile.setSelection(in.getIsAFile());
 
@@ -1456,6 +1482,7 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 		in.setIgnoreEmptyFile(wIgnoreEmptyFile.getSelection());
 		in.setdoNotFailIfNoFile(wdoNotFailIfNoFile.getSelection());
 		in.setIgnoreMissingPath(wIgnoreMissingPath.getSelection());
+		in.setDefaultPathLeafToNull(wDefaultPathLeafToNull.getSelection());
 		in.setInFields(wSourceStreamField.getSelection());
 		in.setIsAFile(wSourceIsAFile.getSelection());
 		in.setFieldValue(wFieldValue.getText());

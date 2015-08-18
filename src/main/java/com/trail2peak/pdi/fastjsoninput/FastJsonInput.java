@@ -613,6 +613,7 @@ public class FastJsonInput extends BaseStep implements StepInterface {
 				data.jsonReader = new FastJsonReader();
 				data.jsonReader
 						.setIgnoreMissingPath(meta.isIgnoreMissingPath());
+				data.jsonReader.setDefaultPathLeafToNull(meta.isDefaultPathLeafToNull());
 
 			} catch (KettleException e) {
 				logError(e.getMessage());

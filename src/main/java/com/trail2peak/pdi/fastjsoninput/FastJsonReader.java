@@ -32,15 +32,25 @@ public class FastJsonReader {
 	private Configuration jsonConfiguration;
 
 	private boolean ignoreMissingPath;
+	private boolean defaultPathLeafToNull;
 
 	public FastJsonReader() throws KettleException {
 		this.ignoreMissingPath = false;
+		this.defaultPathLeafToNull = false;
 		jsonConfiguration = Configuration.defaultConfiguration().addOptions(
 				Option.ALWAYS_RETURN_LIST, Option.SUPPRESS_EXCEPTIONS);
 	}
 
 	public void setIgnoreMissingPath(boolean value) {
 		this.ignoreMissingPath = value;
+	}
+
+	public void setDefaultPathLeafToNull(boolean value) {
+		this.defaultPathLeafToNull = value;
+		if (this.defaultPathLeafToNull) {
+			jsonConfiguration = Configuration.defaultConfiguration().addOptions(
+					Option.ALWAYS_RETURN_LIST, Option.SUPPRESS_EXCEPTIONS, Option.DEFAULT_PATH_LEAF_TO_NULL);
+		}
 	}
 
 	private ParseContext getParseContext() {

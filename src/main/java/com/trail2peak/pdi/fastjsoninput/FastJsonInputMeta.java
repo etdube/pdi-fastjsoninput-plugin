@@ -106,6 +106,8 @@ public class FastJsonInputMeta extends BaseStepMeta implements
 
 	private boolean ignoreMissingPath;
 
+	private boolean defaultPathLeafToNull;
+
 	/** Flag : read url as source */
 	private boolean readurl;
 
@@ -490,11 +492,25 @@ public class FastJsonInputMeta extends BaseStepMeta implements
 	}
 
 	/**
+	 * @return the defaultPathLeafToNull flag
+	 */
+	public boolean isDefaultPathLeafToNull() {
+		return defaultPathLeafToNull;
+	}
+
+	/**
 	 * @param ignoreMissingPath
 	 *            the ignoreMissingPath to set
 	 */
 	public void setIgnoreMissingPath(boolean ignoreMissingPath) {
 		this.ignoreMissingPath = ignoreMissingPath;
+	}
+
+	/**
+	 * @param defaultPathLeafToNull
+	 */
+	public void setDefaultPathLeafToNull(boolean defaultPathLeafToNull) {
+		this.defaultPathLeafToNull = defaultPathLeafToNull;
 	}
 
 	/**
