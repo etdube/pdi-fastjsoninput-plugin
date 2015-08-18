@@ -37,7 +37,8 @@ import org.pentaho.di.trans.step.StepMetaInterface;
  *
  * @author Samatar
  * @author edube
- * @since 2015-01-07
+ * @author jadametz
+ * @since 2015-08-18
  */
 public class FastJsonInput extends BaseStep implements StepInterface {
 	private static Class<?> PKG = FastJsonInputMeta.class; // for i18n purposes,

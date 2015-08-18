@@ -17,7 +17,8 @@ import com.jayway.jsonpath.ReadContext;
 /**
  * @author Samatar
  * @author edube
- * @since 2015-01-07
+ * @author jadametz
+ * @since 2015-08-18
  */
 public class FastJsonReader {
 	private static Class<?> PKG = FastJsonInputMeta.class; // for i18n purposes,
