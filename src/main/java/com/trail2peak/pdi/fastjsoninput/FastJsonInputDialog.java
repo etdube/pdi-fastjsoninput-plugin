@@ -689,6 +689,11 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 		wlIgnoreMissingPath.setLayoutData(fdlIgnoreMissingPath);
 		wIgnoreMissingPath = new Button(wConf, SWT.CHECK);
 		props.setLook(wIgnoreMissingPath);
+		wIgnoreMissingPath.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				input.setChanged();
+			}
+		});
 		wIgnoreMissingPath.setToolTipText(BaseMessages.getString(PKG,
 				"FastJsonInputDialog.IgnoreMissingPath.Tooltip"));
 		fdIgnoreMissingPath = new FormData();
@@ -709,6 +714,11 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 		wlDefaultPathLeafToNull.setLayoutData(fdlDefaultPathLeafToNull);
 		wDefaultPathLeafToNull = new Button(wConf, SWT.CHECK);
 		props.setLook(wDefaultPathLeafToNull);
+		wDefaultPathLeafToNull.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				input.setChanged();
+			}
+		});
 		wDefaultPathLeafToNull.setToolTipText(BaseMessages.getString(PKG,
 				"FastJsonInputDialog.DefaultPathLeafToNull.Tooltip"));
 		fdDefaultPathLeafToNull = new FormData();
