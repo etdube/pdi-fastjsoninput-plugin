@@ -18,7 +18,6 @@ import org.pentaho.di.trans.TransHopMeta;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.trans.step.StepInterface;
 import org.pentaho.di.trans.step.StepMeta;
-import org.pentaho.di.trans.steps.selectvalues.SelectValuesMeta;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ public class FastJsonInputTests extends TestCase {
         FastJsonInputMeta fjim = new FastJsonInputMeta();
         fjim.setInFields(true);
         fjim.setFieldValue("json_data");
+        fjim.setRemoveSourceField(true);
         fjim.setIgnoreMissingPath(ignoreMissingPath);
         fjim.setDefaultPathLeafToNull(defaultPathLeafToNull);
 
@@ -81,18 +81,6 @@ public class FastJsonInputTests extends TestCase {
         StepMeta fjiStep = new StepMeta(fjiPid, name, fjim);
 
         return fjiStep;
-    }
-
-    private StepMeta createSelectValuesStep(String name, PluginRegistry registry) {
-        SelectValuesMeta svm = new SelectValuesMeta();
-        String[] deleteNames = new String[1];
-        deleteNames[0] = "json_data";
-        svm.setDeleteName(deleteNames);
-
-        String svPid = registry.getPluginId(StepPluginType.class, svm);
-        StepMeta svStep = new StepMeta(svPid, name, svm);
-
-        return svStep;
     }
 
     /**
@@ -178,22 +166,13 @@ public class FastJsonInputTests extends TestCase {
         TransHopMeta injector_hop_fjis = new TransHopMeta(injectorStep, fastJsonInputStep);
         transMeta.addTransHop(injector_hop_fjis);
 
-        // Create select values step to remove json field
-        String selectValuesName = "select values";
-        StepMeta selectValuesStep = createSelectValuesStep(selectValuesName, registry);
-        transMeta.addStep(selectValuesStep);
-
-        // TransHopMeta between FastJsonInput and Select Values
-        TransHopMeta svs_hop_fjis = new TransHopMeta(fastJsonInputStep, selectValuesStep);
-        transMeta.addTransHop(svs_hop_fjis);
-
         // Create a dummy step
         String dummyStepName = "dummy step";
         StepMeta dummyStep = TestUtilities.createDummyStep(dummyStepName, registry);
         transMeta.addStep(dummyStep);
 
-        // TransHopMeta between Select Values and Dummy
-        TransHopMeta fjis_hop_dummy = new TransHopMeta(selectValuesStep, dummyStep);
+        // TransHopMeta between FastJsonInput and Dummy
+        TransHopMeta fjis_hop_dummy = new TransHopMeta(fastJsonInputStep, dummyStep);
         transMeta.addTransHop(fjis_hop_dummy);
 
         // Execute the transformation
