@@ -11,7 +11,11 @@ import org.pentaho.di.core.row.RowMeta;
 import org.pentaho.di.core.row.RowMetaInterface;
 import org.pentaho.di.core.row.ValueMeta;
 import org.pentaho.di.core.row.ValueMetaInterface;
-import org.pentaho.di.trans.*;
+import org.pentaho.di.trans.RowProducer;
+import org.pentaho.di.trans.RowStepCollector;
+import org.pentaho.di.trans.Trans;
+import org.pentaho.di.trans.TransHopMeta;
+import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.trans.step.StepInterface;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.trans.steps.selectvalues.SelectValuesMeta;
@@ -31,7 +35,15 @@ public class FastJsonInputTests extends TestCase {
 
     private static final String MISSING_ID_JSON =
             "[{\"id\": 123, \"first_name\": \"Jesse\", \"last_name\": \"Adametz\", \"city\": \"Santa Barbara\"},"
-                    + "{\"id\": 456, \"first_name\": \"James\", \"last_name\": \"Ebentier\", \"city\": \"Santa Barbara\"}]";
+                    + "{\"first_name\": \"James\", \"last_name\": \"Ebentier\", \"city\": \"Santa Barbara\"}]";
+
+    private static final String NO_ID_JSON =
+            "[{\"first_name\": \"Jesse\", \"last_name\": \"Adametz\", \"city\": \"Santa Barbara\"},"
+                    + "{\"first_name\": \"James\", \"last_name\": \"Ebentier\", \"city\": \"Santa Barbara\"}]";
+
+    private static final String NO_ID_AND_MISSING_CITY_JSON =
+            "[{\"first_name\": \"Jesse\", \"last_name\": \"Adametz\"},"
+                    + "{\"first_name\": \"James\", \"last_name\": \"Ebentier\", \"city\": \"Santa Barbara\"}]";
 
     private StepMeta createFastJsonInputStep(String name, PluginRegistry registry, boolean ignoreMissingPath,
                                              boolean defaultPathLeafToNull) {
@@ -105,12 +117,12 @@ public class FastJsonInputTests extends TestCase {
      * Create input data for test case 1
      * @return list of metadata/data couples
      */
-    public List<RowMetaAndData> createInputData() {
+    public List<RowMetaAndData> createInputData(String data) {
         List<RowMetaAndData> list = new ArrayList<RowMetaAndData>();
         ValueMetaInterface[] valuesMeta = {new ValueMeta("json_data", ValueMeta.TYPE_STRING)};
         RowMetaInterface rm = createRowMetaInterface(valuesMeta);
 
-        Object[] r1 = new Object[] {WELL_STRUCTURED_JSON};
+        Object[] r1 = new Object[] {data};
 
         list.add(new RowMetaAndData(rm , r1));
 
@@ -138,7 +150,15 @@ public class FastJsonInputTests extends TestCase {
         return list;
     }
 
-    public void testParseWellStructuredJson() throws Exception {
+    /**
+     * Runs the transformation with the below input parameters
+     * @param inputData JSON string
+     * @param ignoreMissingPath boolean
+     * @param defaultPathLeafToNull boolean
+     * @return Transformation Results
+     */
+    public List<RowMetaAndData> test(String inputData, boolean ignoreMissingPath, boolean defaultPathLeafToNull)
+            throws Exception {
         KettleEnvironment.init();
 
         // Create a new transformation
@@ -153,7 +173,8 @@ public class FastJsonInputTests extends TestCase {
 
         // Create a FastJsonInput step
         String fastJsonInputName = "FastJsonInput step";
-        StepMeta fastJsonInputStep = createFastJsonInputStep(fastJsonInputName, registry, false, false);
+        StepMeta fastJsonInputStep = createFastJsonInputStep(fastJsonInputName, registry, ignoreMissingPath,
+                defaultPathLeafToNull);
         transMeta.addStep(fastJsonInputStep);
 
         // TransHopMeta between injector step and FastJsonInput
@@ -192,7 +213,7 @@ public class FastJsonInputTests extends TestCase {
         trans.startThreads();
 
         // create the rows
-        List<RowMetaAndData> inputList = createInputData();
+        List<RowMetaAndData> inputList = createInputData(inputData);
         Iterator<RowMetaAndData> it = inputList.iterator();
         while (it.hasNext()) {
             RowMetaAndData rowMetaAndData = it.next();
@@ -201,9 +222,43 @@ public class FastJsonInputTests extends TestCase {
         rowProducer.finished();
 
         trans.waitUntilFinished();
-
-        // Compare the results
         List<RowMetaAndData> transformationResults = dummyRowCollector.getRowsWritten();
+
+        return transformationResults;
+    }
+
+    public void testWellStructuredJson() throws Exception {
+        List<RowMetaAndData> transformationResults = test(WELL_STRUCTURED_JSON, false, false);
+        List<RowMetaAndData> expectedResults = createExpectedResults();
+        try {
+            TestUtilities.checkRows(transformationResults, expectedResults, 0);
+        } catch(TestFailedException tfe) {
+            fail(tfe.getMessage());
+        }
+    }
+
+    public void testNoIdJson() throws Exception {
+        List<RowMetaAndData> transformationResults = test(NO_ID_JSON, true, false);
+        List<RowMetaAndData> expectedResults = createExpectedResults();
+        try {
+            TestUtilities.checkRows(transformationResults, expectedResults, 0);
+        } catch(TestFailedException tfe) {
+            fail(tfe.getMessage());
+        }
+    }
+
+    public void testMissingIdJson() throws Exception {
+        List<RowMetaAndData> transformationResults = test(MISSING_ID_JSON, false, true);
+        List<RowMetaAndData> expectedResults = createExpectedResults();
+        try {
+            TestUtilities.checkRows(transformationResults, expectedResults, 0);
+        } catch(TestFailedException tfe) {
+            fail(tfe.getMessage());
+        }
+    }
+
+    public void testNoIdAndMissingCityJson() throws Exception {
+        List<RowMetaAndData> transformationResults = test(NO_ID_AND_MISSING_CITY_JSON, true, true);
         List<RowMetaAndData> expectedResults = createExpectedResults();
         try {
             TestUtilities.checkRows(transformationResults, expectedResults, 0);
