@@ -21,7 +21,6 @@ import org.pentaho.di.trans.step.StepMeta;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -78,9 +77,8 @@ public class FastJsonInputTests extends TestCase {
         fjim.setInputFields(inputFields);
 
         String fjiPid = registry.getPluginId(StepPluginType.class, fjim);
-        StepMeta fjiStep = new StepMeta(fjiPid, name, fjim);
 
-        return fjiStep;
+        return new StepMeta(fjiPid, name, fjim);
     }
 
     /**
@@ -91,8 +89,8 @@ public class FastJsonInputTests extends TestCase {
     private RowMetaInterface createRowMetaInterface(ValueMetaInterface[] valuesMeta) {
         RowMetaInterface rm = new RowMeta();
 
-        for (int i = 0; i < valuesMeta.length; i++) {
-            rm.addValueMeta(valuesMeta[i]);
+        for (ValueMetaInterface aValuesMeta : valuesMeta) {
+            rm.addValueMeta(aValuesMeta);
         }
 
         return rm;
@@ -190,17 +188,14 @@ public class FastJsonInputTests extends TestCase {
 
         // create the rows
         List<RowMetaAndData> inputList = createInputData(inputData);
-        Iterator<RowMetaAndData> it = inputList.iterator();
-        while (it.hasNext()) {
-            RowMetaAndData rowMetaAndData = it.next();
+        for (RowMetaAndData rowMetaAndData : inputList) {
             rowProducer.putRow(rowMetaAndData.getRowMeta(), rowMetaAndData.getData());
         }
         rowProducer.finished();
 
         trans.waitUntilFinished();
-        List<RowMetaAndData> transformationResults = dummyRowCollector.getRowsWritten();
 
-        return transformationResults;
+        return dummyRowCollector.getRowsWritten();
     }
 
     public void testWellStructuredJson() throws Exception {
