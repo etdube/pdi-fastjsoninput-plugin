@@ -20,30 +20,27 @@ import org.pentaho.di.trans.step.StepInterface;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.trans.steps.selectvalues.SelectValuesMeta;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by jadametz on 8/20/15.
  */
 public class FastJsonInputTests extends TestCase {
 
-    private static final String WELL_STRUCTURED_JSON =
-            "[{\"id\": \"123\", \"first_name\": \"Jesse\", \"last_name\": \"Adametz\", \"city\": \"Santa Barbara\"},"
-                    + "{\"id\": \"456\", \"first_name\": \"James\", \"last_name\": \"Ebentier\", \"city\": \"Santa Barbara\"}]";
-
-    private static final String MISSING_ID_JSON =
-            "[{\"id\": 123, \"first_name\": \"Jesse\", \"last_name\": \"Adametz\", \"city\": \"Santa Barbara\"},"
-                    + "{\"first_name\": \"James\", \"last_name\": \"Ebentier\", \"city\": \"Santa Barbara\"}]";
-
-    private static final String NO_ID_JSON =
-            "[{\"first_name\": \"Jesse\", \"last_name\": \"Adametz\", \"city\": \"Santa Barbara\"},"
-                    + "{\"first_name\": \"James\", \"last_name\": \"Ebentier\", \"city\": \"Santa Barbara\"}]";
-
-    private static final String NO_ID_AND_MISSING_CITY_JSON =
-            "[{\"first_name\": \"Jesse\", \"last_name\": \"Adametz\"},"
-                    + "{\"first_name\": \"James\", \"last_name\": \"Ebentier\", \"city\": \"Santa Barbara\"}]";
+    private Properties myProperties = new Properties();
+    public FastJsonInputTests() {
+        InputStream propertiesInputStream = getClass().getResourceAsStream("test.properties");
+        try {
+            this.myProperties.load(propertiesInputStream);
+            propertiesInputStream.close();
+        } catch (Exception e) {
+            throw new ExceptionInInitializerError("There was a problem initializing the properties file: " + e.toString());
+        }
+    }
 
     private StepMeta createFastJsonInputStep(String name, PluginRegistry registry, boolean ignoreMissingPath,
                                              boolean defaultPathLeafToNull) {
@@ -103,7 +100,7 @@ public class FastJsonInputTests extends TestCase {
      * @param valuesMeta defined ValueMetaInterface
      * @return RowMetaInterface
      */
-    public RowMetaInterface createRowMetaInterface(ValueMetaInterface[] valuesMeta) {
+    private RowMetaInterface createRowMetaInterface(ValueMetaInterface[] valuesMeta) {
         RowMetaInterface rm = new RowMeta();
 
         for (int i = 0; i < valuesMeta.length; i++) {
@@ -117,7 +114,7 @@ public class FastJsonInputTests extends TestCase {
      * Create input data for test case 1
      * @return list of metadata/data couples
      */
-    public List<RowMetaAndData> createInputData(String data) {
+    private List<RowMetaAndData> createInputData(String data) {
         List<RowMetaAndData> list = new ArrayList<RowMetaAndData>();
         ValueMetaInterface[] valuesMeta = {new ValueMeta("json_data", ValueMeta.TYPE_STRING)};
         RowMetaInterface rm = createRowMetaInterface(valuesMeta);
@@ -134,7 +131,7 @@ public class FastJsonInputTests extends TestCase {
      *
      * @return list of metadata/data couples of how the result should look.
      */
-    public List<RowMetaAndData> createExpectedResults() {
+    private List<RowMetaAndData> createExpectedResults() {
         List<RowMetaAndData> list = new ArrayList<RowMetaAndData>();
         ValueMetaInterface[] valuesMeta =
                 { new ValueMeta("id", ValueMeta.TYPE_INTEGER), new ValueMeta("first_name", ValueMeta.TYPE_STRING),
@@ -157,7 +154,7 @@ public class FastJsonInputTests extends TestCase {
      * @param defaultPathLeafToNull boolean
      * @return Transformation Results
      */
-    public List<RowMetaAndData> test(String inputData, boolean ignoreMissingPath, boolean defaultPathLeafToNull)
+    private List<RowMetaAndData> test(String inputData, boolean ignoreMissingPath, boolean defaultPathLeafToNull)
             throws Exception {
         KettleEnvironment.init();
 
@@ -228,7 +225,7 @@ public class FastJsonInputTests extends TestCase {
     }
 
     public void testWellStructuredJson() throws Exception {
-        List<RowMetaAndData> transformationResults = test(WELL_STRUCTURED_JSON, false, false);
+        List<RowMetaAndData> transformationResults = test(myProperties.getProperty("WELL_STRUCTURED_JSON"), false, false);
         List<RowMetaAndData> expectedResults = createExpectedResults();
         try {
             TestUtilities.checkRows(transformationResults, expectedResults, 0);
@@ -238,7 +235,7 @@ public class FastJsonInputTests extends TestCase {
     }
 
     public void testNoIdJson() throws Exception {
-        List<RowMetaAndData> transformationResults = test(NO_ID_JSON, true, false);
+        List<RowMetaAndData> transformationResults = test(myProperties.getProperty("NO_ID_JSON"), true, false);
         List<RowMetaAndData> expectedResults = createExpectedResults();
         try {
             TestUtilities.checkRows(transformationResults, expectedResults, 0);
@@ -248,7 +245,7 @@ public class FastJsonInputTests extends TestCase {
     }
 
     public void testMissingIdJson() throws Exception {
-        List<RowMetaAndData> transformationResults = test(MISSING_ID_JSON, false, true);
+        List<RowMetaAndData> transformationResults = test(myProperties.getProperty("MISSING_ID_JSON"), false, true);
         List<RowMetaAndData> expectedResults = createExpectedResults();
         try {
             TestUtilities.checkRows(transformationResults, expectedResults, 0);
@@ -258,7 +255,7 @@ public class FastJsonInputTests extends TestCase {
     }
 
     public void testNoIdAndMissingCityJson() throws Exception {
-        List<RowMetaAndData> transformationResults = test(NO_ID_AND_MISSING_CITY_JSON, true, true);
+        List<RowMetaAndData> transformationResults = test(myProperties.getProperty("NO_ID_AND_MISSING_CITY_JSON"), true, true);
         List<RowMetaAndData> expectedResults = createExpectedResults();
         try {
             TestUtilities.checkRows(transformationResults, expectedResults, 0);
