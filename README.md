@@ -8,6 +8,7 @@ be much faster and memory efficient.
 ## Authors:
 - Etienne Dube - etdube (at) gmail (dot) com
 - Jesse Adametz - jesse (at) graphiq (dot) com
+- James Ebentier - jebentier (at) graphiq (dot) com
 
 ## Build
 To build (requires Apache Maven 3 or later) and install:
@@ -16,7 +17,12 @@ To build (requires Apache Maven 3 or later) and install:
 mvn package
 ```
 
-The plugin will be placed under the `plugins/steps/FastJsonInput` subdirectory.
-Simply copy the `FastJsonInput` directory to the `plugins/steps` directory in
-your Pentaho Data Integration installation and launch Spoon. The new step
-should be available under the "Experimental" category.
+## Install
+Simply create `install.properties` in the root directory and put the following line:
+```
+pdi.home=/path/to/local/data-integration
+```
+Then run
+```shell
+mvn install
+```
