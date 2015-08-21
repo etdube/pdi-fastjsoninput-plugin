@@ -53,6 +53,12 @@
 			<version>5.0.9</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>pentaho-kettle</groupId>
+			<artifactId>kettle-test</artifactId>
+			<version>4.4.3.3</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
