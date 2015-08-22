@@ -4,7 +4,7 @@
 
 	<groupId>com.trail2peak.pdi</groupId>
 	<artifactId>FastJsonInput</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<!-- <packaging>jar</packaging> -->
 
 	<name>FastJsonInput</name>
@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<pdi.plugin.dir>plugins/steps/${project.name}</pdi.plugin.dir>
-		<pdi.plugin.lib_name>fastjsoninput.jar</pdi.plugin.lib_name>
+		<pdi.plugin.lib_name>fastjsoninput-${project.version}.jar</pdi.plugin.lib_name>
 		<pdi.plugin.includelibs>json-path-1.2.0.jar,json-smart-2.1.0.jar,asm-1.0.2.jar</pdi.plugin.includelibs>
 
 		<maven.compiler.source>1.6</maven.compiler.source>
