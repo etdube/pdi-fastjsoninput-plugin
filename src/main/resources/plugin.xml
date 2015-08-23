@@ -3,7 +3,7 @@
 	tooltip="Parses JSON input with a native Java parser" category="Input"
 	classname="com.trail2peak.pdi.fastjsoninput.FastJsonInputMeta">
 	<libraries>
-		<library name="fastjsoninput-1.0.0.jar" />
+		<library name="fastjsoninput.jar" />
 		<library name="json-path-1.2.0.jar" />
 		<library name="json-smart-2.1.0.jar" />
 		<library name="asm-1.0.2.jar" />
