@@ -27,10 +27,10 @@ import java.util.Properties;
 /**
  * Created by jadametz on 8/20/15.
  */
-public class FastJsonInputTests extends TestCase {
+public class FastJsonInputTest extends TestCase {
 
     private Properties myProperties = new Properties();
-    public FastJsonInputTests() {
+    public FastJsonInputTest() {
         InputStream propertiesInputStream = getClass().getResourceAsStream("test.properties");
         try {
             this.myProperties.load(propertiesInputStream);
