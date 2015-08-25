@@ -202,6 +202,8 @@
 						<phase>package</phase>
 						<configuration>
 							<tasks>
+								<echo>Deleting plugin directory if it exists</echo>
+								<delete dir="${pdi.plugin.dir}" quiet="true" />
 								<echo>Copying images etc to pdi plugin directory
 									(${pdi.plugin.dir})</echo>
 								<copy todir="${pdi.plugin.dir}" overwrite="true">
