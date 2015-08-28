@@ -4,7 +4,7 @@
 
 	<groupId>com.trail2peak.pdi</groupId>
 	<artifactId>FastJsonInput</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<!-- <packaging>jar</packaging> -->
 
 	<name>FastJsonInput</name>
@@ -13,13 +13,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<pdi.plugin.dir>plugins/steps/${name}</pdi.plugin.dir>
+		<pdi.plugin.dir>plugins/steps/${project.name}</pdi.plugin.dir>
 		<pdi.plugin.lib_name>fastjsoninput.jar</pdi.plugin.lib_name>
 		<pdi.plugin.includelibs>json-path-1.2.0.jar,json-smart-2.1.0.jar,asm-1.0.2.jar</pdi.plugin.includelibs>
-		<pdi.home>/home/soliumuser/workspace/pentaho-kettle/dist</pdi.home>
 
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
 	</properties>
 
 	<repositories>
@@ -52,6 +51,12 @@
 			<groupId>pentaho-kettle</groupId>
 			<artifactId>kettle-ui-swt</artifactId>
 			<version>5.0.9</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>pentaho-kettle</groupId>
+			<artifactId>kettle-test</artifactId>
+			<version>4.4.3.3</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -88,6 +93,12 @@
 
 	<build>
 		<outputDirectory>target/classes</outputDirectory>
+		<testSourceDirectory>src/test</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>src/test</directory>
+			</testResource>
+		</testResources>
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
@@ -98,8 +109,27 @@
 		</resources>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>install.properties</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.10</version>
 				<configuration>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>true</downloadJavadocs>
@@ -107,6 +137,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
@@ -160,6 +191,8 @@
 						<phase>package</phase>
 						<configuration>
 							<tasks>
+								<echo>Deleting plugin directory if it exists</echo>
+								<delete dir="${pdi.plugin.dir}" quiet="true" />
 								<echo>Copying images etc to pdi plugin directory
 									(${pdi.plugin.dir})</echo>
 								<copy todir="${pdi.plugin.dir}" overwrite="true">
@@ -169,7 +202,7 @@
 								<echo>Copying the plugin lib to pdi plugin directory
 									(${pdi.plugin.dir})</echo>
 								<copy toFile="${pdi.plugin.dir}/${pdi.plugin.lib_name}"
-									file="${project.build.directory}/${artifactId}-${version}-plugin-lib.jar"
+									file="${project.build.directory}/${project.artifactId}-${project.version}-plugin-lib.jar"
 									overwrite="true" />
 								<echo>Copying the additional libs to pdi plugin directory
 									(${pdi.plugin.dir})</echo>
@@ -177,6 +210,37 @@
 									<fileset dir="${project.build.directory}/deplibs"
 										includes="${pdi.plugin.includelibs}" />
 								</copy>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<tasks>
+								<echo message="Looking for local PDI installation in ${pdi.home}"/>
+
+								<!-- change these to adapt to your environment -->
+								<property name="kettle-dir" location="your_kettle_4.x_dir_here" />
+								<available file="${pdi.home}" type="dir" property="kettle-dir.present" />
+
+								<fail unless="kettle-dir.present" message="PDI installation not found. Please specify the path to your PDI installation in build/build.properties" />
+
+								<!-- remove previous installations -->
+								<delete dir="${pdi.home}/plugins/steps/${project.name}" />
+
+								<!-- put fresh files in place -->
+								<mkdir dir="${pdi.home}/plugins/steps/${project.name}" />
+
+								<copy todir="${pdi.home}/plugins/steps/${project.name}">
+									<fileset dir="${pdi.plugin.dir}" includes="**/*.*" />
+									<fileset dir="${pdi.plugin.dir}" includes="**" />
+								</copy>
+
+								<echo message="Installed the plugin in PDI. To test, please restart Spoon."/>
+
 							</tasks>
 						</configuration>
 						<goals>

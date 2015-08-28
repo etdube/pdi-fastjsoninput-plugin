@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin id="FastJsonInput" iconfile="FJSI.png" description="Fast JSON Input"
-	tooltip="Parses JSON input with a native Java parser" category="Experimental"
+	tooltip="Parses JSON input with a native Java parser" category="Input"
 	classname="com.trail2peak.pdi.fastjsoninput.FastJsonInputMeta">
 	<libraries>
 		<library name="fastjsoninput.jar" />
@@ -10,7 +10,7 @@
 	</libraries>
 
 	<localized_category>
-		<category locale="en_US">Experimental</category>
+		<category locale="en_US">Input</category>
 	</localized_category>
 	<localized_description>
 		<description locale="en_US">Fast JSON Input</description>
