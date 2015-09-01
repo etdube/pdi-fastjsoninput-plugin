@@ -210,6 +210,8 @@
 									<fileset dir="${project.build.directory}/deplibs"
 										includes="${pdi.plugin.includelibs}" />
 								</copy>
+								<echo>Copying version.xml to the pdi plugin directory</echo>
+								<copy toFile="${pdi.plugin.dir}/version.xml" file="version.xml"/>
 							</tasks>
 						</configuration>
 						<goals>
