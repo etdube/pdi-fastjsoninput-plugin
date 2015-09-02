@@ -1,5 +1,7 @@
 # _Fast_ JSON Input - PDI Plugin
 
+*NOTE* - this repository is *deprecated*. [Jesse Adametz](https://github.com/jadametz) and [James Ebentier](https://github.com/jebentier) from [Graphiq](https://www.graphiq.com/) picked up the code where I left it and improved on it: https://github.com/graphiq-data/pdi-fastjsoninput-plugin. Their fork is more likely to be actively maintained, we suggest that you have a look over there before using this version.
+
 This is an alternate version of the "JSON Input" step that uses [Jayway JsonPath](https://github.com/jayway/JsonPath) instead of a parser based on JavaScript. It is intended to be a drop-in replacement for the "JSON Input" step but should be much faster and memory efficient.
 
 ## Features over PDI JSON Input
