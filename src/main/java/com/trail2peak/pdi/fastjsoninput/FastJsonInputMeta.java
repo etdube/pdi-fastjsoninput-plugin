@@ -957,12 +957,13 @@ public class FastJsonInputMeta extends BaseStepMeta implements
 
 			readurl = rep.getStepAttributeBoolean(id_step, "readurl");
 			
-			removeSourceField = rep.getStepAttributeBoolean(id_step, "removeSourceField");
+			removeSourceField = rep.getStepAttributeBoolean( id_step, "removeSourceField" );
 
 			IsIgnoreEmptyFile = rep.getStepAttributeBoolean(id_step,
 					"IsIgnoreEmptyFile");
 			ignoreMissingPath = rep.getStepAttributeBoolean(id_step,
 					"ignoreMissingPath");
+			defaultPathLeafToNull = rep.getStepAttributeBoolean( id_step, "defaultPathLeafToNull" );
 
 			doNotFailIfNoFile = rep.getStepAttributeBoolean(id_step,
 					"doNotFailIfNoFile");
@@ -1063,6 +1064,7 @@ public class FastJsonInputMeta extends BaseStepMeta implements
 					"IsIgnoreEmptyFile", IsIgnoreEmptyFile);
 			rep.saveStepAttribute(id_transformation, id_step,
 					"ignoreMissingPath", ignoreMissingPath);
+			rep.saveStepAttribute( id_transformation, id_step, "defaultPathLeafToNull", defaultPathLeafToNull );
 
 			rep.saveStepAttribute(id_transformation, id_step,
 					"doNotFailIfNoFile", doNotFailIfNoFile);
