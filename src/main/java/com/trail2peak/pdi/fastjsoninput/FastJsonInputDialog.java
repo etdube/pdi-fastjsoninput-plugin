@@ -32,6 +32,7 @@ import org.pentaho.di.core.Const;
 import org.pentaho.di.core.Props;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.fileinput.FileInputList;
+import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.row.RowMetaInterface;
 import org.pentaho.di.core.row.ValueMeta;
 import org.pentaho.di.i18n.BaseMessages;
@@ -40,6 +41,7 @@ import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.trans.TransPreviewFactory;
 import org.pentaho.di.trans.step.BaseStepMeta;
 import org.pentaho.di.trans.step.StepDialogInterface;
+import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.ui.core.dialog.EnterNumberDialog;
 import org.pentaho.di.ui.core.dialog.EnterSelectionDialog;
 import org.pentaho.di.ui.core.dialog.EnterTextDialog;
@@ -1476,6 +1478,12 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 					e);
 		}
 		dispose();
+	}
+
+	@Override
+	protected Button createHelpButton(Shell shell, StepMeta stepMeta, PluginInterface plugin) {
+		plugin.setDocumentationUrl("https://github.com/graphiq-data/pdi-fastjsoninput-plugin/blob/master/help.md");
+		return super.createHelpButton(shell, stepMeta, plugin);
 	}
 
 	private void getInfo(FastJsonInputMeta in) throws KettleException {
