@@ -1186,7 +1186,7 @@ public class FastJsonInputDialog extends BaseStepDialog implements
 					}
 				} else {
 					FileDialog dialog = new FileDialog(shell, SWT.OPEN);
-					dialog.setFilterExtensions(new String[] { "*.js;*.JS", "*" });
+					dialog.setFilterExtensions(new String[] { "*.js;*.JS;*.json;*.JSON", "*" });
 					if (wFilename.getText() != null) {
 						String fname = transMeta
 								.environmentSubstitute(wFilename.getText());
