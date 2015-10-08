@@ -22,6 +22,10 @@ This is an alternate version of the "JSON Input" step that uses [Jayway JsonPath
 
 * Tests! There are currently 4 test cases which test the permutations of "Ignore missing path" and "Default path leaf to null"
 
+## Help
+
+Help for the step and its usage can be found in the [Help documentation](help.md).
+
 ## Development
 
 ### Build
