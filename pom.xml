@@ -15,7 +15,7 @@
 
 		<pdi.plugin.dir>plugins/steps/${project.name}</pdi.plugin.dir>
 		<pdi.plugin.lib_name>fastjsoninput.jar</pdi.plugin.lib_name>
-		<pdi.plugin.includelibs>json-path-1.2.0.jar,json-smart-2.1.0.jar,asm-1.0.2.jar</pdi.plugin.includelibs>
+		<pdi.plugin.includelibs>json-path-1.2.0.jar,json-smart-2.2.jar,asm-1.0.2.jar</pdi.plugin.includelibs>
 
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
@@ -81,7 +81,7 @@
 		<dependency>
 			<groupId>net.minidev</groupId>
 			<artifactId>json-smart</artifactId>
-			<version>2.1.0</version>
+			<version>2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>net.minidev</groupId>
