@@ -856,6 +856,15 @@ public class FastJsonInputMeta extends BaseStepMeta implements
 			}
 		}
 
+		// Remove source field from metadata if necessary
+		if (removeSourceField) {
+			try {
+				r.removeValueMeta(valueField);
+			} catch (Exception e) {
+				throw new KettleStepException(e);
+			}
+		}
+
 		if (includeFilename) {
 			ValueMetaInterface v = new ValueMeta(
 					space.environmentSubstitute(filenameField),

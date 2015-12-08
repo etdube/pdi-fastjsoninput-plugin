@@ -141,14 +141,13 @@ public class FastJsonInput extends BaseStep implements StepInterface {
 				
 				// if RemoveSourceField option is set, we remove the source field from the output meta
 				if (meta.isRemoveSourceField()) {
-					data.outputRowMeta.removeValueMeta(data.indexSourceField);
 					// Get total previous fields minus one since we remove source field
 					data.totalpreviousfields = data.inputRowMeta.size() - 1;
 				} else {
 					// Get total previous fields
 					data.totalpreviousfields = data.inputRowMeta.size();
 				}
-				
+
 				meta.getFields(data.outputRowMeta, getStepname(), null, null,
 						this, repository, metaStore);
 
