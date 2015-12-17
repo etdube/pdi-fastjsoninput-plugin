@@ -1,5 +1,7 @@
 # _Fast_ JSON Input - PDI Plugin
 
+[![Build Status](https://travis-ci.org/graphiq-data/pdi-fastjsoninput-plugin.svg?branch=master)](https://travis-ci.org/graphiq-data/pdi-fastjsoninput-plugin)
+
 This is an alternate version of the "JSON Input" step that uses [Jayway JsonPath](https://github.com/jayway/JsonPath) instead of a parser based on JavaScript. It is intended to be a drop-in replacement for the "JSON Input" step but should be much faster and memory efficient.
 
 ## Features over PDI JSON Input
