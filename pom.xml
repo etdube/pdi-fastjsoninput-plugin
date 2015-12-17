@@ -4,7 +4,7 @@
 
 	<groupId>com.trail2peak.pdi</groupId>
 	<artifactId>FastJsonInput</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.4</version>
 	<!-- <packaging>jar</packaging> -->
 
 	<name>FastJsonInput</name>

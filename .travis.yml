@@ -1,1 +1,4 @@
 language: java
+
+# skipping the install since its solely for local deployment
+install: true
