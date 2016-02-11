@@ -39,16 +39,7 @@ mvn package
 
 ### Install
 
-1. Simply create `install.properties` in the root directory with the following line:
-
-    ```
-    pdi.home=/path/to/local/data-integration
-    ```
-2. Then run
-
-    ```shell
-    mvn install
-    ```
+1. Run mvn install -Dpdi.home=/path/to/local/data-integration (e.g. - mvn install -Dpdi.home=/ssd/graphiq/gq-kettle/dist)
 
 ## Authors:
 - [Etienne Dube](https://github.com/etdube) - etdube (at) gmail (dot) com

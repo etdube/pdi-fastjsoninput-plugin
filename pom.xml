@@ -5,18 +5,11 @@
 	<groupId>com.trail2peak.pdi</groupId>
 	<artifactId>FastJsonInput</artifactId>
 	<version>1.0.4</version>
-	<!-- <packaging>jar</packaging> -->
-
 	<name>FastJsonInput</name>
-	<url>http://maven.apache.org</url>
+
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<pdi.plugin.dir>plugins/steps/${project.name}</pdi.plugin.dir>
-		<pdi.plugin.lib_name>fastjsoninput.jar</pdi.plugin.lib_name>
-		<pdi.plugin.includelibs>json-path-1.2.0.jar,json-smart-2.2.jar,asm-1.0.2.jar</pdi.plugin.includelibs>
-
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 	</properties>
@@ -39,38 +32,32 @@
 			<groupId>pentaho-kettle</groupId>
 			<artifactId>kettle-core</artifactId>
 			<version>5.0.9</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-kettle</groupId>
 			<artifactId>kettle-engine</artifactId>
 			<version>5.0.9</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-kettle</groupId>
 			<artifactId>kettle-ui-swt</artifactId>
 			<version>5.0.9</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-kettle</groupId>
 			<artifactId>kettle-test</artifactId>
 			<version>4.4.3.3</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>jsonpath</groupId>
 			<artifactId>jsonpath</artifactId>
 			<version>1.0</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -92,55 +79,33 @@
 	</dependencies>
 
 	<build>
-		<outputDirectory>target/classes</outputDirectory>
-		<testSourceDirectory>src/test</testSourceDirectory>
-		<testResources>
-			<testResource>
-				<directory>src/test</directory>
-			</testResource>
-		</testResources>
 		<resources>
-			<resource>
-				<directory>src/main/java</directory>
+			<resource> <!--Required to explicitly exclude resources from jar to follow kettle model-->
+				<directory>src/main/resources</directory>
+				<excludes><exclude>**</exclude></excludes>
 			</resource>
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>src/main/java</directory>
+				<includes> <!--Required to explicitly include resources to jar to accommodate legacy resource bundle -->
+					<include>**/*.properties</include>
+				</includes>
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-2</version>
-				<executions>
-					<execution>
-						<phase>install</phase>
-						<goals>
-							<goal>read-project-properties</goal>
-						</goals>
-						<configuration>
-							<files>
-								<file>install.properties</file>
-							</files>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.10</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<finalName>fastjsoninput</finalName>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -155,7 +120,8 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/deplibs</outputDirectory>
+							<outputDirectory>target/lib</outputDirectory>
+							<excludeTransitive>true</excludeTransitive>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
@@ -163,61 +129,12 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<descriptors>
-						<descriptor>src/main/assemble/plugin-lib.xml</descriptor>
-					</descriptors>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
+
+			<plugin> <!--Required to build the final dist as per kettle spec-->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.8</version>
 				<executions>
-					<execution>
-						<id>default-cli</id>
-						<phase>package</phase>
-						<configuration>
-							<tasks>
-								<echo>Deleting plugin directory if it exists</echo>
-								<delete dir="${pdi.plugin.dir}" quiet="true" />
-								<echo>Copying images etc to pdi plugin directory
-									(${pdi.plugin.dir})</echo>
-								<copy todir="${pdi.plugin.dir}" overwrite="true">
-									<fileset dir="${project.build.outputDirectory}"
-										includes="**/*.png,**/*.xml" />
-								</copy>
-								<echo>Copying the plugin lib to pdi plugin directory
-									(${pdi.plugin.dir})</echo>
-								<copy toFile="${pdi.plugin.dir}/${pdi.plugin.lib_name}"
-									file="${project.build.directory}/${project.artifactId}-${project.version}-plugin-lib.jar"
-									overwrite="true" />
-								<echo>Copying the additional libs to pdi plugin directory
-									(${pdi.plugin.dir})</echo>
-								<copy toDir="${pdi.plugin.dir}">
-									<fileset dir="${project.build.directory}/deplibs"
-										includes="${pdi.plugin.includelibs}" />
-								</copy>
-								<echo>Copying version.xml to the pdi plugin directory</echo>
-								<copy toFile="${pdi.plugin.dir}/version.xml" file="version.xml"/>
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
 					<execution>
 						<phase>install</phase>
 						<configuration>
@@ -227,22 +144,19 @@
 								<!-- change these to adapt to your environment -->
 								<property name="kettle-dir" location="your_kettle_4.x_dir_here" />
 								<available file="${pdi.home}" type="dir" property="kettle-dir.present" />
-
-								<fail unless="kettle-dir.present" message="PDI installation not found. Please specify the path to your PDI installation in build/build.properties" />
+								<fail unless="kettle-dir.present" message="PDI installation not found. Please specify the path to your PDI installation using mvn install -Dpdi.home=/my/path"/>
 
 								<!-- remove previous installations -->
 								<delete dir="${pdi.home}/plugins/steps/${project.name}" />
 
 								<!-- put fresh files in place -->
 								<mkdir dir="${pdi.home}/plugins/steps/${project.name}" />
-
 								<copy todir="${pdi.home}/plugins/steps/${project.name}">
-									<fileset dir="${pdi.plugin.dir}" includes="**/*.*" />
-									<fileset dir="${pdi.plugin.dir}" includes="**" />
+									<fileset dir="target/" includes="**/fastjson*.jar" />
+									<fileset dir="src/main/resources/" includes="**" />
+									<fileset dir="target/lib" includes="json-smart*jar,json-path*jar,asm*jar"  />
 								</copy>
-
 								<echo message="Installed the plugin in PDI. To test, please restart Spoon."/>
-
 							</tasks>
 						</configuration>
 						<goals>
@@ -251,11 +165,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8.2</version>
-			</plugin>
+
 		</plugins>
 	</build>
 </project>
