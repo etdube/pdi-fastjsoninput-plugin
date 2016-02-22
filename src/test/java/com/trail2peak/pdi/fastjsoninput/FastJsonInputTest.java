@@ -1,5 +1,7 @@
 package com.trail2peak.pdi.fastjsoninput;
 
+import com.trail2peak.pdi.fastjsoninput.FastJsonInputField;
+import com.trail2peak.pdi.fastjsoninput.FastJsonInputMeta;
 import junit.framework.TestCase;
 import org.pentaho.di.TestFailedException;
 import org.pentaho.di.TestUtilities;
@@ -31,7 +33,7 @@ public class FastJsonInputTest extends TestCase {
 
     private Properties myProperties = new Properties();
     public FastJsonInputTest() {
-        InputStream propertiesInputStream = getClass().getResourceAsStream("test.properties");
+        InputStream propertiesInputStream = getClass().getClassLoader().getResourceAsStream("test.properties");
         try {
             this.myProperties.load(propertiesInputStream);
             propertiesInputStream.close();
