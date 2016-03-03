@@ -234,7 +234,12 @@ public class FastJsonInputTest extends TestCase {
         List<RowMetaAndData> transformationResults = test(myProperties.getProperty("NO_ID_AND_MISSING_CITY_JSON"), true, true);
         List<RowMetaAndData> expectedResults = createExpectedResults();
         try {
-            TestUtilities.checkRows(transformationResults, expectedResults, 0);
+            if (transformationResults.get(0).getData()[3] != null
+                && transformationResults.get(1).getData()[3] == null) {
+                TestUtilities.checkRows(transformationResults, expectedResults, 0);
+            } else {
+                fail("testNoIdAndMissingCityJson: The second city value was not null. Please investigate.");
+            }
         } catch(TestFailedException tfe) {
             fail(tfe.getMessage());
         }
