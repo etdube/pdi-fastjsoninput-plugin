@@ -527,13 +527,6 @@ public class FastJsonInput extends BaseStep implements StepInterface {
 			outputRowData[data.totalpreviousfields + i] = targetValueMeta
 					.convertData(sourceValueMeta, nodevalue);
 
-			// Do we need to repeat this field if it is null?
-			if (meta.getInputFields()[i].isRepeated()) {
-				if (data.previousRow != null && Const.isEmpty(nodevalue)) {
-					outputRowData[data.totalpreviousfields + i] = data.previousRow[data.totalpreviousfields
-							+ i];
-				}
-			}
 		} // End of loop over fields...
 
 		// When we have an input stream
